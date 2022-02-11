@@ -8,7 +8,8 @@ import java.util.UUID;
  * IMPORTANT: Do not change this class
  */
 
-public class Recipe {
+public class
+Recipe {
 	private String id;
 	private String title;
 	private String image;

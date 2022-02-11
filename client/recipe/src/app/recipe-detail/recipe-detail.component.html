@@ -1,1 +1,31 @@
-<p>recipe-detail works!</p>
+<div class="container">
+  <table>
+    <tr>
+      <td><h2>{{recipe?.title}}</h2>
+      </td>
+    </tr>
+    <tr>
+      <hr>
+    </tr>
+    <tr>
+      <td><img src="{{recipe?.image}}" height="300px" alt="{{recipe?.title}}"></td>
+    </tr>
+    <tr>
+      <td><h3>Ingredients</h3></td>
+      <!--        <ol *ngFor="let i of recipe?.ingredients">-->
+      <!--          <li>{{i}}</li>-->
+
+      <!--        </ol>-->
+    </tr>
+    <tr>
+      <p>{{recipe?.ingredients}}</p>
+    </tr>
+    <tr>
+      <td><h3>Instruction</h3></td>
+    </tr>
+    <tr>
+      <td>{{recipe?.instruction}}</td>
+    </tr>
+  </table>
+
+</div>
