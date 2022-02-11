@@ -18,12 +18,12 @@ export class RecipeDetailComponent implements OnInit {
 
 
   constructor(private route: ActivatedRoute,
-              private recipeSvc: RecipeService,
-              private router: Router) { }
+              private recipeSvc: RecipeService) { }
 
   ngOnInit(): void {
     this.id = this.route.snapshot.params['id'];
     this.getRecipe(this.id);
+
   }
 
   getRecipe(id: string) {
@@ -31,8 +31,8 @@ export class RecipeDetailComponent implements OnInit {
     this.recipeSvc.getRecipe(id)
       .then(r => {
         this.recipe = r
-        console.log('recipe > ', typeof this.recipe)
         this.ingredients = this.recipe.ingredients
+        console.log('recipe > ', this.ingredients)
 
       });
   }

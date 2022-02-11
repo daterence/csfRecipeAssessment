@@ -29,14 +29,19 @@
         <h3>Instruction</h3>
       </tr>
       <tr>
-        <textarea name="instruction" id="instruction" cols="50" rows="5"></textarea>
+        <textarea name="instruction" id="instruction" cols="50" rows="5" formControlName="instruction"></textarea>
       </tr>
       <tr>
         <label for="image">Image</label>
       </tr>
       <tr>
-        <input type="text" id="image">
+        <input type="text" id="image" formControlName="image" #image>
       </tr>
+      <div class="row">
+        <div class="col">
+          <img [src]="image.value" height="200px">
+        </div>
+      </div>
     </table>
     <hr>
     <table>
@@ -45,7 +50,7 @@
           <button type="button" class="btn btn-danger" [routerLink]="['/']">Back</button>
         </td>
         <td>
-          <button type="submit" class="btn btn-primary">Add</button>
+          <button type="submit" class="btn btn-primary" [disabled]="form.invalid">Add</button>
         </td>
       </tr>
     </table>

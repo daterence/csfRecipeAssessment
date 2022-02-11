@@ -8,3 +8,6 @@ export interface Recipe extends RecipeSummary {
   instruction: string;
   ingredients: string[]
 }
+export interface ResponseMessage {
+  message: string;
+}

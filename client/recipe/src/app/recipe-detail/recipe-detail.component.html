@@ -13,10 +13,12 @@
     <tr>
       <td><h3>Ingredients</h3></td>
     </tr>
-<!--    <ul *ngFor="let ingredient of recipe?.ingredients">-->
-<!--      <li>{{ingredient}}</li>-->
+    <div *ngFor="let ingredient of recipe?.ingredients">
+      <ul>
+        <li>{{ingredient}}</li>
+      </ul>
+    </div>
 
-<!--    </ul>-->
     <tr>
       <p>{{recipe?.ingredients}}</p>
     </tr>

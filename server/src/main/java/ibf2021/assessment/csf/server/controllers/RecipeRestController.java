@@ -7,13 +7,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
-import java.util.LinkedList;
-import java.util.List;
+import java.io.ByteArrayInputStream;
+import java.io.InputStream;
 import java.util.Optional;
 import java.util.logging.Logger;
 
@@ -26,29 +23,24 @@ public class RecipeRestController {
     @Autowired
     private RecipeService recipeSvc;
 
-    @GetMapping(path = "{recipeId}")
+    @GetMapping(path = "/{recipeId}")
     public ResponseEntity<String> getRecipe(@PathVariable String recipeId) {
         Optional<Recipe> recipeDetails = recipeSvc.getRecipeById(recipeId);
 
         if (recipeDetails.isPresent()) {
             logger.info("Recipe for ID: %s exist".formatted(recipeId));
             Recipe recipe = recipeDetails.get();
+            JsonObjectBuilder recipeBuilder = Json.createObjectBuilder();
             JsonArrayBuilder ingredientsBuilder = Json.createArrayBuilder();
-            for (String ingredient: recipe.getIngredients()) {
-                ingredientsBuilder.add(ingredient);
-            }
-            JsonArray ingredients = ingredientsBuilder.build();
-            logger.info("ingredients >> " + ingredients);
+            recipeBuilder.add("id", recipe.getId());
+            recipeBuilder.add("title", recipe.getTitle());
+            recipeBuilder.add("image", recipe.getImage());
+            recipeBuilder.add("instruction", recipe.getInstruction());
 
-            JsonObject jo = Json.createObjectBuilder()
-                    .add("title", recipe.getTitle())
-                    .add("id", recipe.getId())
-                    .add("image", recipe.getImage())
-                    .add("ingredients", ingredients.toString())
-                    .add("instruction", recipe.getInstruction())
-                    .build();
+            recipe.getIngredients().forEach(ingredientsBuilder::add);
+            recipeBuilder.add("ingredients", ingredientsBuilder);
 
-            return ResponseEntity.ok(jo.toString());
+            return ResponseEntity.ok(recipeBuilder.build().toString());
         } else {
             logger.info("Recipe for ID: %s does not exist".formatted(recipeId));
             JsonObject jo = Json.createObjectBuilder()
@@ -59,4 +51,44 @@ public class RecipeRestController {
         }
 
     }
+
+    @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<String> postRecipe(@RequestBody String request) {
+        logger.info("Recipe" + request);
+
+        Recipe recipe = new Recipe();
+
+        try (InputStream is = new ByteArrayInputStream(request.getBytes())) {
+            JsonReader reader = Json.createReader(is);
+            JsonObject data = reader.readObject();
+
+            recipe.setTitle(data.getString("title"));
+            recipe.setImage(data.getString("image"));
+            recipe.setInstruction(data.getString("instruction"));
+
+            JsonArray ingredients = data.getJsonArray("ingredients");
+            for (JsonValue ingredient: ingredients) {
+                recipe.addIngredient(ingredient.toString().replaceAll("^\"|\"$", ""));
+            }
+
+            recipeSvc.addRecipe(recipe);
+
+            JsonObject jo = Json.createObjectBuilder()
+                    .add("message", "created")
+                    .build();
+
+            return ResponseEntity.status(HttpStatus.CREATED).body(jo.toString());
+        } catch (Exception e) {
+            logger.info("CATCH >>> %s".formatted(e));
+
+            JsonObject jo = Json.createObjectBuilder()
+                    .add("error", e.toString())
+                    .build();
+
+            return ResponseEntity.status(HttpStatus.SERVICE_UNAVAILABLE).body(jo.toString());
+        }
+
+    }
+
+
 }
