@@ -1,29 +1,35 @@
 <div class="container-fluid">
-  <form>
+  <form [formGroup]="form" (ngSubmit)="onAddRecipe()">
     <table>
       <tr>
         <label for="title">Title</label>
       </tr>
       <tr>
-        <input type="text" id="title">
+        <input type="text" id="title" formControlName="title">
+      </tr>
+      <table>
+        <tr>
+          <td>Ingredients</td>
+          <td><button type="button" class="btn btn-success" (click)="onAddIngredient()">+</button></td>
+        </tr>
+
+        <tbody formArrayName="ingredients">
+          <tr *ngFor="let ingControl of controls; let i = index" [formGroupName]="i">
+            <td><input type="text" class="form-control" formControlName="name"></td>
+            <td>
+              <button class="btn btn-danger" type="button" (click)="onDeleteIngredient(i)">X</button>
+            </td>
+          </tr>
+        </tbody>
+
+
+      </table>
+
+      <tr>
+        <h3>Instruction</h3>
       </tr>
       <tr>
-        <td><label for="ingredients">Ingredients</label></td>
-        <td>
-          <button class="btn btn-success">+</button>
-        </td>
-      </tr>
-      <tr>
-        <td><input type="text" class="form-control" placeholder="name"></td>
-        <td>
-          <button class="btn btn-danger">X</button>
-        </td>
-      </tr>
-      <tr>
-        <label for="instruction">Instruction</label>
-      </tr>
-      <tr>
-        <textarea name="instruction" id="" cols="50" rows="5"></textarea>
+        <textarea name="instruction" id="instruction" cols="50" rows="5"></textarea>
       </tr>
       <tr>
         <label for="image">Image</label>
@@ -35,8 +41,12 @@
     <hr>
     <table>
       <tr>
-        <td><button type="button" class="btn btn-danger" [routerLink]="['/']">Back</button></td>
-        <td><button type="submit" class="btn btn-primary">Add</button></td>
+        <td>
+          <button type="button" class="btn btn-danger" [routerLink]="['/']">Back</button>
+        </td>
+        <td>
+          <button type="submit" class="btn btn-primary">Add</button>
+        </td>
       </tr>
     </table>
   </form>

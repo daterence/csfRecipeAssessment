@@ -12,11 +12,11 @@
     </tr>
     <tr>
       <td><h3>Ingredients</h3></td>
-      <!--        <ol *ngFor="let i of recipe?.ingredients">-->
-      <!--          <li>{{i}}</li>-->
-
-      <!--        </ol>-->
     </tr>
+<!--    <ul *ngFor="let ingredient of recipe?.ingredients">-->
+<!--      <li>{{ingredient}}</li>-->
+
+<!--    </ul>-->
     <tr>
       <p>{{recipe?.ingredients}}</p>
     </tr>
@@ -27,5 +27,8 @@
       <td>{{recipe?.instruction}}</td>
     </tr>
   </table>
-
+  <hr>
+  <div class="justify-right">
+    <button type="button" class="btn btn-danger" [routerLink]="['/']">Back</button>
+  </div>
 </div>
