@@ -3,7 +3,8 @@ import {HttpClient, HttpHeaders} from "@angular/common/http";
 import {Recipe, RecipeSummary, ResponseMessage} from "./models";
 import {lastValueFrom} from "rxjs";
 
-const URL_API_RECIPE = 'http://localhost:8080/api/';
+// const URL_API_RECIPE = 'http://localhost:8080/api/';
+const URL_API_RECIPE = '/api/';
 
 @Injectable()
 export class RecipeService {
